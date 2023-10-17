@@ -1,5 +1,6 @@
 package org.LinkedList;
 
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,11 +30,14 @@ public class SinglyLinkedList {
         linkedList.pushAtEnd(500);
         linkedList.pushAfterGivenNode(null, 10);
         linkedList.printList();
-        log.log(Level.INFO, "Total number of nodes present: {0}", linkedList.numberOfNodes());
-        Node desiredNode = linkedList.getNodeOnPosition(3);
+        log.log(Level.INFO, "Total number of nodes present: {0}", linkedList.getNumberOfNodes());
+        Node desiredNode = linkedList.getNodeOnPosition(1);
         log.log(Level.INFO, "Node -> data: {0}", desiredNode.data);
         log.log(Level.INFO, "The Node position of head.next.next is: {0}",
                 linkedList.getNodePosition(linkedList.head.next.next));
+        log.log(Level.INFO, "Is there any loop present : {0}", linkedList.detectLoop(linkedList.head));
+        linkedList.deleteNode(linkedList.head.next.next);
+        linkedList.printList();
     }
 
     public void printList() {
@@ -74,7 +78,7 @@ public class SinglyLinkedList {
         prevNode.next = node;
     }
 
-    public int numberOfNodes() {
+    public int getNumberOfNodes() {
         int count = 0;
         Node node = head;
         while (node != null) {
@@ -108,5 +112,39 @@ public class SinglyLinkedList {
             count++;
         }
         return 0;
+    }
+
+    public void deleteNode(Node deleteNode) {
+        if (deleteNode == null) {
+            log.log(Level.INFO, "The given node is null.");
+            return;
+        }
+        int deleteNodePosition = getNodePosition(deleteNode);
+        int totalNodes = getNumberOfNodes();
+
+        if (deleteNodePosition == 1) {
+            head = deleteNode.next;
+            deleteNode.next = null;
+        } else if (deleteNodePosition == totalNodes) {
+            Node n = getNodeOnPosition(totalNodes - 1);
+            n.next = null;
+            deleteNode.next = null;
+        } else {
+            Node n = getNodeOnPosition(deleteNodePosition - 1);
+            n.next = deleteNode.next;
+            deleteNode.next = null;
+        }
+    }
+
+    public boolean detectLoop(Node node) {
+        HashSet<Node> set = new HashSet<>();
+        while (node != null) {
+            if (set.contains(node))
+                return true;
+
+            set.add(node);
+            node = node.next;
+        }
+        return false;
     }
 }
