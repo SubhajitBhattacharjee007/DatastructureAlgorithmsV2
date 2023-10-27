@@ -65,4 +65,12 @@ public class DoublyLinkedList {
 
         }
 
+        private static int getPositionOfGivenNode(Node node){
+        return 0;
+        }
+
+        private static Node getNodeOnSpecifiedPosition(int pos){
+        return null;
+        }
+
 }
